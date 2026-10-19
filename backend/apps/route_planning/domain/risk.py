@@ -5,7 +5,7 @@ bounds so the boundary semantics in the specification are encoded literally.
 """
 
 from dataclasses import dataclass
-from decimal import Decimal
+from decimal import ROUND_DOWN, Decimal
 
 from .enums import DataStatus, RiskLevel, WeatherMetric
 from .exceptions import InvalidLoadWeight
@@ -154,10 +154,10 @@ def validate_load_weight(load_lb: int) -> None:
 
 
 def describe_band(band: Band, unit: str) -> str:
-    lower = _format_number(band.lower)
+    lower = format_measurement_value(band.lower, unit)
     if band.upper is None:
         return f"{lower} {unit} or above" if band.lower_inclusive else f"above {lower} {unit}"
-    upper = _format_number(band.upper)
+    upper = format_measurement_value(band.upper, unit)
     if band.lower == 0:
         return f"below {upper} {unit}"
     if band.upper_inclusive:
@@ -244,10 +244,10 @@ def _explain(
 ) -> str:
     by_metric = {m.metric: m for m in metrics}
     if level == RiskLevel.LOW:
-        values = ", ".join(
-            f"{m.metric.value} {_format_measurement(m)}" for m in metrics if m.level is not None
-        )
-        sentence = f"Low: {values} are below every Moderate threshold."
+        known = known_metrics(metrics)
+        values = _join_words([f"{m.metric.value} {_format_measurement(m)}" for m in known])
+        verb = "is" if len(known) == 1 else "are"
+        sentence = f"Low: {values} {verb} below every Moderate threshold."
     else:
         reasons = [_decisive_reason(by_metric[metric], adjustment, load_lb) for metric in decisive]
         sentence = f"{level.label}: " + "; ".join(reasons) + "."
@@ -276,15 +276,23 @@ def _decisive_reason(
 def _format_measurement(assessment: MetricAssessment) -> str:
     if assessment.value is None:
         return "unavailable"
-    return f"{_format_number(assessment.value)} {assessment.unit}"
+    return f"{format_measurement_value(assessment.value, assessment.unit)} {assessment.unit}"
 
 
-def _format_number(value: Decimal) -> str:
-    if value == value.to_integral_value():
-        return f"{value:.0f}"
-    text = f"{value.quantize(Decimal('0.001')):f}".rstrip("0")
+def format_measurement_value(value: Decimal, unit: str) -> str:
+    """Format for explanations, truncating (never rounding up) so a displayed
+    value cannot appear to reach a threshold the measurement did not reach."""
+    min_places = 0 if unit == "mph" else 2
+    max_places = 2 if unit == "mph" else 3
+    truncated = value.quantize(Decimal(1).scaleb(-max_places), rounding=ROUND_DOWN)
+    text = f"{truncated:f}"
     integer, _, fraction = text.partition(".")
-    return f"{integer}.{fraction.ljust(2, '0')}"
+    fraction = fraction.rstrip("0").ljust(min_places, "0")
+    return f"{integer}.{fraction}" if fraction else integer
+
+
+def known_metrics(metrics: tuple[MetricAssessment, ...]) -> list[MetricAssessment]:
+    return [m for m in metrics if m.level is not None]
 
 
 def _join_words(words: list[str]) -> str:

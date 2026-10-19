@@ -76,3 +76,40 @@ class RouteGeometry:
         fraction = (distance_miles - start) / (end - start) if end > start else 0.0
         a, b = self.points[lower], self.points[upper]
         return Coordinate(a.lat + (b.lat - a.lat) * fraction, a.lon + (b.lon - a.lon) * fraction)
+
+
+def simplify(points: tuple[Coordinate, ...], tolerance_degrees: float) -> list[Coordinate]:
+    """Ramer-Douglas-Peucker simplification for display geometry only.
+
+    Checkpoints and distances are always computed from the full geometry.
+    Planar degrees are an adequate metric at display tolerances (~tens of m).
+    """
+    if len(points) < 3:
+        return list(points)
+    keep = [False] * len(points)
+    keep[0] = keep[-1] = True
+    stack = [(0, len(points) - 1)]
+    while stack:
+        start, end = stack.pop()
+        index, distance = _farthest(points, start, end)
+        if distance > tolerance_degrees:
+            keep[index] = True
+            stack.extend(((start, index), (index, end)))
+    return [point for point, kept in zip(points, keep, strict=True) if kept]
+
+
+def _farthest(points: tuple[Coordinate, ...], start: int, end: int) -> tuple[int, float]:
+    a, b = points[start], points[end]
+    dx, dy = b.lon - a.lon, b.lat - a.lat
+    length_sq = dx * dx + dy * dy
+    best_index, best_distance = start, 0.0
+    for i in range(start + 1, end):
+        p = points[i]
+        if length_sq == 0:
+            distance = math.hypot(p.lon - a.lon, p.lat - a.lat)
+        else:
+            t = max(0.0, min(1.0, ((p.lon - a.lon) * dx + (p.lat - a.lat) * dy) / length_sq))
+            distance = math.hypot(p.lon - (a.lon + t * dx), p.lat - (a.lat + t * dy))
+        if distance > best_distance:
+            best_index, best_distance = i, distance
+    return best_index, best_distance

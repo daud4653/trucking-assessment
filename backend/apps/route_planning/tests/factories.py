@@ -14,9 +14,10 @@ def reading(
 ) -> WeatherReading:
     return WeatherReading(
         valid_time=VALID_TIME,
+        precipitation_window_end=VALID_TIME,
         wind_mph=Decimal(wind) if wind is not None else None,
         gust_mph=Decimal(gust) if gust is not None else None,
         rain_in_per_hr=Decimal(rain) if rain is not None else None,
         snow_in_per_hr=Decimal(snow) if snow is not None else None,
-        issued_at=VALID_TIME,
+        retrieved_at=VALID_TIME,
     )
