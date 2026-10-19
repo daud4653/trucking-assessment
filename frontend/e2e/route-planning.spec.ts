@@ -31,12 +31,12 @@ test('selecting a route and checkpoint explains the classification', async ({ pa
   await expect(page.getByRole('heading', { name: /Checkpoints · Route C/ })).toBeVisible()
   await expect(page.getByText(/this route contains a No Travel segment/)).toBeVisible()
 
-  await page.getByRole('button', { name: /Mile 100\.0, no_travel risk/ }).click()
+  await page.getByRole('button', { name: /Mile 100\.0, No Travel risk/ }).click()
   const detail = page.getByRole('article', { name: /Checkpoint at mile 100/ })
   await expect(detail).toContainText('No Travel: wind is 58 mph')
   await expect(detail).toContainText('55 mph or above')
 
-  await page.getByRole('button', { name: /Mile 200\.0, unknown risk/ }).click()
+  await page.getByRole('button', { name: /Mile 200\.0, Unknown risk/ }).click()
   await expect(page.getByRole('article', { name: /Checkpoint at mile 200/ })).toContainText(
     'No forecast available: not assessed',
   )

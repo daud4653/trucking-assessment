@@ -22,3 +22,8 @@ SECURE_REFERRER_POLICY = "same-origin"
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 X_FRAME_OPTIONS = "DENY"
+
+# The API is stateless JSON without cookies or sessions, so there is no
+# ambient credential for CSRF to protect. Re-enable CsrfViewMiddleware if
+# cookie-based authentication is ever added.
+SILENCED_SYSTEM_CHECKS = ["security.W003"]

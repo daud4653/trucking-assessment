@@ -22,11 +22,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "config.middleware.ContentSecurityPolicyMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.gzip.GZipMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+MAP_TILE_ORIGIN = env_str("MAP_TILE_ORIGIN", "https://tiles.openfreemap.org")
 
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
@@ -69,6 +72,14 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 FRONTEND_DIST_DIR = Path(env_str("FRONTEND_DIST_DIR", str(REPO_DIR / "frontend" / "dist")))
 WHITENOISE_ROOT = FRONTEND_DIST_DIR if FRONTEND_DIST_DIR.is_dir() else None
+
+
+def _is_hashed_frontend_asset(path: str, url: str) -> bool:
+    # Vite fingerprints everything under /assets/, so it can be cached forever.
+    return url.startswith("/assets/")
+
+
+WHITENOISE_IMMUTABLE_FILE_TEST = _is_hashed_frontend_asset
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 16 * 1024
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100

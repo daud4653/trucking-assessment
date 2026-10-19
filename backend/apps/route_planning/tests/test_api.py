@@ -253,3 +253,17 @@ def test_health_and_readiness(api):
     ready = api.get("/api/v1/ready/")
     assert ready.status_code == 200
     assert ready.json()["checks"] == {"database": True, "cache": True}
+
+
+def test_unknown_api_path_returns_json_error(api):
+    response = api.get("/api/v1/does-not-exist/")
+    assert response.status_code == 404
+    assert response.json()["error"]["code"] == "not_found"
+
+
+def test_security_headers(api):
+    response = api.get("/api/v1/health/")
+    policy = response["Content-Security-Policy"]
+    assert "default-src 'self'" in policy
+    assert "frame-ancestors 'none'" in policy
+    assert response["X-Content-Type-Options"] == "nosniff"

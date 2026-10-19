@@ -1,6 +1,7 @@
 import type { Checkpoint } from '@/features/route-planning/api/schemas'
 import { formatTime } from '@/lib/date-time'
 import { formatMeasurement } from '@/lib/format'
+import { riskLabel } from '@/lib/risk'
 import { RiskLabel } from '@/components/risk/RiskLabel'
 import styles from './CheckpointList.module.css'
 
@@ -34,7 +35,7 @@ export function CheckpointList({ checkpoints, selectedId, onSelect }: Checkpoint
                   type="button"
                   className={`${styles.select} numeric`}
                   aria-pressed={selected}
-                  aria-label={`Mile ${checkpoint.distance_miles.toFixed(1)}, ${checkpoint.risk_level ?? 'unknown'} risk`}
+                  aria-label={`Mile ${checkpoint.distance_miles.toFixed(1)}, ${riskLabel(checkpoint.risk_level)} risk`}
                   onClick={() => onSelect(checkpoint.id)}
                 >
                   {checkpoint.distance_miles.toFixed(0)}

@@ -82,7 +82,7 @@ describe('RouteComparison', () => {
   it('checkpoint details show measurements and the load rule that applied', async () => {
     const user = setup()
     await user.click(screen.getByRole('button', { name: /Rank 2 Route B/ }))
-    await user.click(screen.getByRole('button', { name: 'Mile 25.0, no_travel risk' }))
+    await user.click(screen.getByRole('button', { name: 'Mile 25.0, No Travel risk' }))
 
     const detail = screen.getByRole('article', { name: /Checkpoint at mile 25/ })
     expect(within(detail).getByText(/triggering the heavy-load severe-wind rule/)).toBeInTheDocument()
@@ -115,7 +115,7 @@ describe('RouteComparison', () => {
       plan: plan({ routes: [route({ checkpoints: [checkpoint(), missing] })] }),
     })
     const user = userEvent.setup()
-    await user.click(screen.getByRole('button', { name: 'Mile 25.0, unknown risk' }))
+    await user.click(screen.getByRole('button', { name: 'Mile 25.0, Unknown risk' }))
     const detail = screen.getByRole('article')
     expect(within(detail).getByText('No forecast available: not assessed')).toBeInTheDocument()
     expect(within(detail).getAllByText('Unknown').length).toBeGreaterThan(0)
