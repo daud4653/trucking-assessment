@@ -39,14 +39,20 @@ class PhotonGeocodingProvider:
             parsed = _Response.model_validate(payload)
         except ValidationError as exc:
             raise ProviderResponseInvalid(PROVIDER, "unexpected geocoding response") from exc
-        places = []
+        places: list[Place] = []
+        seen: set[tuple[str, float, float]] = set()
         for feature in parsed.features:
             lon, lat = feature.geometry.coordinates
             try:
                 coordinate = Coordinate(lat, lon)
             except InvalidGeometry:
                 continue
-            places.append(Place(label=_label(feature.properties), coordinate=coordinate))
+            label = _label(feature.properties)
+            key = (label, round(lat, 3), round(lon, 3))
+            if key in seen:
+                continue
+            seen.add(key)
+            places.append(Place(label=label, coordinate=coordinate))
         return places
 
 

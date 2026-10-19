@@ -1,0 +1,53 @@
+.table {
+  font-size: var(--text-sm);
+}
+
+.table th,
+.table td {
+  padding: 5px var(--space-2);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table th:first-child,
+.table td:first-child {
+  padding-left: var(--space-4);
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--color-canvas);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--color-ink-faint);
+  border-bottom: var(--border);
+  z-index: 1;
+}
+
+.table tbody tr {
+  border-bottom: var(--border);
+}
+
+.table tbody tr:hover {
+  background: var(--color-surface-sunken);
+}
+
+.table tbody tr[data-selected='true'] {
+  background: var(--color-accent-tint);
+}
+
+.select {
+  min-width: 40px;
+  padding: 2px 6px;
+  border: var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  text-align: right;
+}
+
+.table tbody tr[data-selected='true'] .select {
+  background: var(--color-accent);
+  border-color: var(--color-accent-strong);
+  color: var(--color-ink-inverse);
+}

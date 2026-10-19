@@ -15,7 +15,14 @@ from datetime import datetime
 
 from apps.route_planning.domain.corridor import CorridorGrid, build_corridor
 from apps.route_planning.domain.geometry import Coordinate
-from apps.route_planning.domain.risk import assess_checkpoint
+from apps.route_planning.domain.risk import (
+    RAIN_SCALE,
+    SNOW_SCALE,
+    WIND_SCALE,
+    MetricScale,
+    assess_checkpoint,
+    assess_metric,
+)
 from apps.route_planning.domain.weather import (
     HOUR,
     HourlySample,
@@ -33,6 +40,9 @@ FORECAST_HOURS = 48
 class CorridorFrame:
     valid_time: datetime
     risk: tuple[int | None, ...]
+    wind_level: tuple[int | None, ...]
+    rain_level: tuple[int | None, ...]
+    snow_level: tuple[int | None, ...]
     wind_mph: tuple[float | None, ...]
     rain_in_per_hr: tuple[float | None, ...]
     snow_in_per_hr: tuple[float | None, ...]
@@ -81,6 +91,9 @@ def _frame(moment: datetime, series: list[HourlySeries | None], load_lb: int) ->
     return CorridorFrame(
         valid_time=moment,
         risk=tuple(_risk(sample, load_lb) for sample in samples),
+        wind_level=tuple(_metric_level(WIND_SCALE, sample, "wind_mph") for sample in samples),
+        rain_level=tuple(_metric_level(RAIN_SCALE, sample, "rain_in_per_hr") for sample in samples),
+        snow_level=tuple(_metric_level(SNOW_SCALE, sample, "snow_in_per_hr") for sample in samples),
         wind_mph=tuple(_number(sample, "wind_mph") for sample in samples),
         rain_in_per_hr=tuple(_number(sample, "rain_in_per_hr") for sample in samples),
         snow_in_per_hr=tuple(_number(sample, "snow_in_per_hr") for sample in samples),
@@ -103,8 +116,15 @@ def _risk(sample: HourlySample | None, load_lb: int) -> int | None:
     return int(level) if level is not None else None
 
 
+def _metric_level(scale: MetricScale, sample: HourlySample | None, field: str) -> int | None:
+    if sample is None:
+        return None
+    level = assess_metric(scale, getattr(sample, field)).level
+    return int(level) if level is not None else None
+
+
 def _number(sample: HourlySample | None, field: str) -> float | None:
     if sample is None:
         return None
     value = getattr(sample, field)
-    return round(float(value), 3) if value is not None else None
+    return round(float(value), 4) if value is not None else None

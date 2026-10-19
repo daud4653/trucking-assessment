@@ -1,0 +1,67 @@
+.dialog {
+  width: min(680px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+  padding: 0;
+  border: var(--border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-overlay);
+}
+
+.dialog::backdrop {
+  background: rgb(29 36 39 / 0.45);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-surface);
+  border-bottom: var(--border);
+}
+
+.header h2 {
+  font-size: var(--text-md);
+}
+
+.close {
+  width: 30px;
+  height: 30px;
+  border: var(--border);
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-lg);
+  line-height: 1;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-5) var(--space-6);
+  font-size: var(--text-sm);
+}
+
+.body h3 {
+  margin-bottom: var(--space-1);
+  font-size: var(--text-base);
+}
+
+.body p + p {
+  margin-top: var(--space-2);
+}
+
+.table {
+  margin: var(--space-2) 0;
+  font-size: var(--text-xs);
+}
+
+.table th,
+.table td {
+  padding: var(--space-1) var(--space-2);
+  border-bottom: var(--border);
+  text-align: left;
+}

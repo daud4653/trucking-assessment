@@ -1,0 +1,84 @@
+:root {
+  /* Surfaces */
+  --color-canvas: #f3f1ec;
+  --color-surface: #fbfaf7;
+  --color-surface-sunken: #ebe8e1;
+  --color-rule: #d6d1c6;
+  --color-rule-strong: #b3ad9f;
+
+  /* Text */
+  --color-ink: #1d2427;
+  --color-ink-muted: #4f585c;
+  --color-ink-faint: #737b7e;
+  --color-ink-inverse: #fbfaf7;
+
+  /* Accent: used for primary actions, focus and the selected route only */
+  --color-accent: #1f4f7a;
+  --color-accent-strong: #163a5a;
+  --color-accent-tint: #e2eaf1;
+  --color-focus: #1f4f7a;
+
+  /* Risk scale. Paired with text labels everywhere; never color alone. */
+  --risk-low: #4c7a55;
+  --risk-moderate: #c19a1b;
+  --risk-high: #d46a1f;
+  --risk-severe: #b3261e;
+  --risk-no-travel: #5e1745;
+  --risk-unknown: #9aa0a3;
+  --risk-low-tint: #e3ece4;
+  --risk-moderate-tint: #f5ecce;
+  --risk-high-tint: #f8e2d0;
+  --risk-severe-tint: #f4d9d6;
+  --risk-no-travel-tint: #ead6e2;
+  --risk-unknown-tint: #e9eaea;
+
+  /* Feedback */
+  --color-critical: #9b1f18;
+  --color-critical-tint: #f6e3e1;
+  --color-warning: #8a5a00;
+  --color-warning-tint: #f7ecd6;
+
+  /* Type */
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --leading-tight: 1.25;
+  --leading-normal: 1.45;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --tracking-caps: 0.06em;
+
+  /* Space (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  /* Shape */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --border: 1px solid var(--color-rule);
+  --border-strong: 1px solid var(--color-rule-strong);
+  --shadow-overlay: 0 1px 2px rgb(29 36 39 / 0.12), 0 4px 12px rgb(29 36 39 / 0.08);
+
+  /* Layout */
+  --topbar-height: 48px;
+  --panel-left-width: 368px;
+  --panel-right-width: 400px;
+
+  --duration-fast: 120ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+  }
+}

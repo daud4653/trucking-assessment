@@ -1,0 +1,33 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.label[data-size='large'] {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  flex: none;
+}
+
+.label[data-size='large'] .swatch {
+  width: 14px;
+  height: 14px;
+}
+
+.label[data-unknown='true'] {
+  color: var(--color-ink-muted);
+}
+
+.label[data-unknown='true'] .swatch {
+  background: transparent !important;
+  border: 1.5px solid var(--risk-unknown);
+}

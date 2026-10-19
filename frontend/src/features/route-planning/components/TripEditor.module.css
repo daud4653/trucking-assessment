@@ -1,0 +1,20 @@
+.editor {
+  border-top: var(--border);
+}
+
+.summary {
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-accent);
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+.summary:hover {
+  background: var(--color-surface-sunken);
+}
+
+.editor[open] .summary {
+  border-bottom: var(--border);
+}

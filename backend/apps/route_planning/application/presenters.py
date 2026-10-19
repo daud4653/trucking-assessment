@@ -13,7 +13,13 @@ from typing import Any
 from apps.route_planning.domain.aggregation import MIN_COVERAGE_RATIO
 from apps.route_planning.domain.enums import RiskLevel
 from apps.route_planning.domain.geometry import Coordinate
-from apps.route_planning.domain.risk import MetricAssessment
+from apps.route_planning.domain.risk import (
+    RAIN_SCALE,
+    SNOW_SCALE,
+    WIND_SCALE,
+    MetricAssessment,
+    describe_band,
+)
 
 from .corridor import CorridorForecast
 from .dto import AssessedCheckpoint, AssessedRoute, PlanCommand, PlanResult, ResolvedLocation
@@ -89,12 +95,22 @@ def present_corridor(plan_id: str, forecast: CorridorForecast) -> dict[str, Any]
                 "offset_hours": index,
                 "valid_time": iso_utc(frame.valid_time),
                 "risk": list(frame.risk),
+                "wind_level": list(frame.wind_level),
+                "rain_level": list(frame.rain_level),
+                "snow_level": list(frame.snow_level),
                 "wind_mph": list(frame.wind_mph),
                 "rain_in_per_hr": list(frame.rain_in_per_hr),
                 "snow_in_per_hr": list(frame.snow_in_per_hr),
             }
             for index, frame in enumerate(forecast.frames)
         ],
+        "scales": {
+            scale.metric.value: [
+                {"level": RISK_LEVEL_CODES[band.level], "band": describe_band(band, scale.unit)}
+                for band in scale.bands
+            ]
+            for scale in (WIND_SCALE, RAIN_SCALE, SNOW_SCALE)
+        },
         "retrieved_at": iso_utc(forecast.retrieved_at) if forecast.retrieved_at else None,
         "coverage_ratio": forecast.coverage_ratio,
         "attribution": forecast.attribution,

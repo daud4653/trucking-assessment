@@ -1,0 +1,33 @@
+.wrapper {
+  position: relative;
+}
+
+.list {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--color-surface);
+  border: var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-overlay);
+}
+
+.option {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+  cursor: pointer;
+}
+
+.option + .option {
+  border-top: var(--border);
+}
+
+.option:hover,
+.option[aria-selected='true'] {
+  background: var(--color-accent-tint);
+}

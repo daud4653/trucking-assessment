@@ -1,0 +1,128 @@
+.timeline {
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: var(--space-6);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-strong);
+  box-shadow: var(--shadow-overlay);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.controls fieldset {
+  min-width: 260px;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.toggle input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+}
+
+.sliderRow {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.offset {
+  font-weight: var(--weight-semibold);
+}
+
+.track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 28px;
+}
+
+.track input {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  accent-color: var(--color-ink);
+  background: transparent;
+}
+
+.tripBand {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  background: var(--color-accent-tint);
+  border-left: 2px solid var(--color-accent);
+  border-right: 2px solid var(--color-accent);
+}
+
+.validTime {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  min-width: 15ch;
+  text-align: right;
+}
+
+.status {
+  font-size: var(--text-xs);
+  color: var(--color-ink-muted);
+}
+
+.error {
+  color: var(--color-critical);
+  font-weight: var(--weight-medium);
+}
+
+.retry {
+  padding: 0 var(--space-2);
+  border: var(--border-strong);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+}
+
+@media (max-width: 640px) {
+  .timeline {
+    position: static;
+    max-width: none;
+    margin: 0;
+    border-width: 1px 0 0;
+    box-shadow: none;
+    padding: var(--space-3);
+  }
+
+  .controls fieldset {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .sliderRow {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .validTime {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+}

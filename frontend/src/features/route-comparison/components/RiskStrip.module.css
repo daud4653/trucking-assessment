@@ -1,0 +1,27 @@
+.strip {
+  display: flex;
+  height: 6px;
+  width: 100%;
+  background: var(--color-surface-sunken);
+  overflow: hidden;
+}
+
+.segment,
+.unknown {
+  flex-basis: 0;
+  min-width: 2px;
+}
+
+.segment + .segment,
+.segment + .unknown {
+  box-shadow: inset 1px 0 0 var(--color-surface);
+}
+
+.unknown {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 2px,
+    rgb(255 255 255 / 0.7) 2px 4px
+  ) !important;
+  background-color: var(--risk-unknown);
+}
